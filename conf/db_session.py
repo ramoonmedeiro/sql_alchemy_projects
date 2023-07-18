@@ -5,6 +5,14 @@ from typing import Optional
 from sqlalchemy.future.engine import Engine
 from models.model_base import ModelBase
 
+# env vars
+import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
+db_user = os.getenv("POSTGRES_USER")
+db_password = os.getenv("POSTGRES_PASSWORD")
+
 
 __engine: Optional[Engine] = None
 
@@ -29,7 +37,7 @@ def create_engine(sqlite: bool = False) -> Engine:
             )
 
     else:
-        conn_str = 'postgresql://admin:teste@localhost:5432/picoles'
+        conn_str = f'postgresql://{db_user}:{db_password}@localhost:5432/picoles'
         __engine = sa.create_engine(url=conn_str, echo=False)
 
     return __engine
